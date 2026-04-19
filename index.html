@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MaidanMind — AI Crowd Intelligence for Indian Stadiums</title>
+  <meta name="description" content="India's first sport-aware crowd intelligence platform. Real-time crowd heatmaps, virtual queue tokens, heat safety, and AI-powered stadium assistance for Indian sporting venues.">
+  <meta name="keywords" content="stadium, crowd management, India, cricket, IPL, AI, MaidanMind">
+  <meta name="theme-color" content="#0B0D17">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== SPLASH SCREEN ==================== -->
+  <div id="splash-screen" class="splash" aria-label="Loading MaidanMind">
+    <div class="splash-content">
+      <div class="splash-logo">🏏</div>
+      <h1 class="splash-title">MaidanMind</h1>
+      <p class="splash-subtitle">मैदानमाइंड</p>
+      <p class="splash-tagline">AI Crowd Intelligence for Indian Stadiums</p>
+      <div class="splash-loader">
+        <div class="loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APP ==================== -->
+  <div id="app" class="app hidden">
+    
+    <!-- ===== TOP HEADER ===== -->
+    <header class="header" id="main-header">
+      <div class="header-left">
+        <span class="header-logo">🏏</span>
+        <h1 class="header-title" data-i18n="appName">MaidanMind</h1>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" id="btn-language" aria-label="Change language" title="Language">
+          <span class="icon-btn-text">EN</span>
+        </button>
+        <button class="icon-btn" id="btn-accessibility" aria-label="Accessibility settings" title="Accessibility">
+          <span>♿</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== LANGUAGE MODAL ===== -->
+    <div class="modal-overlay hidden" id="language-modal" role="dialog" aria-modal="true" aria-label="Select Language">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>🌐 Select Language</h2>
+          <button class="modal-close" id="close-language-modal" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="language-grid" id="language-grid">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ACCESSIBILITY MODAL ===== -->
+    <div class="modal-overlay hidden" id="accessibility-modal" role="dialog" aria-modal="true" aria-label="Accessibility Settings">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>♿ Accessibility</h2>
+          <button class="modal-close" id="close-accessibility-modal" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="setting-row">
+            <label for="toggle-high-contrast">High Contrast</label>
+            <input type="checkbox" id="toggle-high-contrast" class="toggle">
+          </div>
+          <div class="setting-row">
+            <label for="toggle-large-text">Large Text</label>
+            <input type="checkbox" id="toggle-large-text" class="toggle">
+          </div>
+          <div class="setting-row">
+            <label for="toggle-reduce-motion">Reduce Motion</label>
+            <input type="checkbox" id="toggle-reduce-motion" class="toggle">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== VENUE SELECTOR (shown when no venue selected) ===== -->
+    <section id="venue-selector" class="screen active" aria-label="Select Stadium">
+      <div class="venue-hero">
+        <div class="hero-content">
+          <h2 class="hero-title" data-i18n="selectVenue">Select Stadium</h2>
+          <p class="hero-subtitle" data-i18n="tagline">AI Crowd Intelligence for Indian Stadiums</p>
+        </div>
+      </div>
+      <div class="venue-grid" id="venue-grid">
+        <!-- Filled by JS -->
+      </div>
+    </section>
+
+    <!-- ===== TAB SCREENS (shown after venue selected) ===== -->
+    <main id="main-content" class="main-content hidden">
+
+      <!-- Match Bar -->
+      <div class="match-bar" id="match-bar">
+        <button class="match-bar-back" id="btn-back-venue" aria-label="Change venue">←</button>
+        <div class="match-bar-info" id="match-bar-info">
+          <!-- Filled by JS -->
+        </div>
+        <div class="match-bar-live">
+          <span class="live-dot"></span>
+          <span>LIVE</span>
+        </div>
+      </div>
+
+      <!-- ===== HOME TAB ===== -->
+      <section id="tab-home" class="tab-content active" aria-label="Home Dashboard">
+        
+        <!-- Quick Stats -->
+        <div class="stats-row" id="quick-stats">
+          <!-- Filled by JS -->
+        </div>
+
+        <!-- AI Smart Tip -->
+        <div class="smart-tip-card" id="smart-tip">
+          <div class="smart-tip-icon">🧠</div>
+          <div class="smart-tip-content">
+            <h4 data-i18n="smartTip">🧠 Smart Tip</h4>
+            <p id="smart-tip-text">Loading AI prediction...</p>
+          </div>
+        </div>
+
+        <!-- Section Overview -->
+        <h3 class="section-title" data-i18n="crowdStatus">Crowd Status</h3>
+        <div class="sections-grid" id="sections-grid">
+          <!-- Filled by JS -->
+        </div>
+
+        <!-- Gate Status -->
+        <h3 class="section-title" data-i18n="fastestGate">Gate Status</h3>
+        <div class="gates-list" id="gates-list">
+          <!-- Filled by JS -->
+        </div>
+
+        <!-- Exit Plan -->
+        <div class="exit-plan-card" id="exit-plan">
+          <h4>🚗 <span data-i18n="exitPlan">Exit Plan</span></h4>
+          <p id="exit-plan-text">AI will suggest the best exit time...</p>
+          <button class="btn-primary" id="btn-get-exit-plan">Get Exit Plan</button>
+        </div>
+      </section>
+
+      <!-- ===== MAP TAB ===== -->
+      <section id="tab-map" class="tab-content" aria-label="Stadium Map">
+        <div class="map-controls">
+          <button class="map-filter-btn active" data-filter="density" id="filter-density">Crowd Density</button>
+          <button class="map-filter-btn" data-filter="heat" id="filter-heat">🌡️ Heat Map</button>
+          <button class="map-filter-btn" data-filter="facilities" id="filter-facilities">🏪 Facilities</button>
+        </div>
+        <div class="map-container" id="map-container">
+          <div id="stadium-map" class="stadium-map">
+            <!-- SVG stadium map rendered by JS -->
+          </div>
+        </div>
+        <div class="map-legend" id="map-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#00E676"></span> Comfortable</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#FFD600"></span> Moderate</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#FF9100"></span> Crowded</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#FF1744"></span> Critical</div>
+        </div>
+        <!-- Section Detail Panel -->
+        <div class="section-detail hidden" id="section-detail">
+          <button class="section-detail-close" id="close-section-detail">&times;</button>
+          <h4 id="section-detail-name"></h4>
+          <div id="section-detail-body"></div>
+        </div>
+      </section>
+
+      <!-- ===== QUEUE TAB ===== -->
+      <section id="tab-queue" class="tab-content" aria-label="Virtual Queue">
+        
+        <!-- My Active Tokens -->
+        <div class="my-tokens" id="my-tokens-section">
+          <h3 class="section-title" data-i18n="myTokens">My Tokens</h3>
+          <div class="tokens-list" id="tokens-list">
+            <p class="empty-state">No active tokens. Get one below!</p>
+          </div>
+        </div>
+
+        <!-- Queue Tabs -->
+        <div class="queue-tabs">
+          <button class="queue-tab active" data-queue="food" id="qtab-food">🍕 <span data-i18n="foodStalls">Food</span></button>
+          <button class="queue-tab" data-queue="restroom" id="qtab-restroom">🚻 <span data-i18n="restrooms">Restrooms</span></button>
+        </div>
+
+        <!-- Food Stalls List -->
+        <div class="queue-content active" id="queue-food">
+          <div class="stalls-list" id="food-stalls-list">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <!-- Restrooms List -->
+        <div class="queue-content" id="queue-restroom">
+          <div class="stalls-list" id="restrooms-list">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CHAT TAB ===== -->
+      <section id="tab-chat" class="tab-content" aria-label="AI Stadium Assistant">
+        <div class="chat-container" id="chat-container">
+          <div class="chat-messages" id="chat-messages">
+            <!-- Welcome message added by JS -->
+          </div>
+        </div>
+        <div class="chat-suggestions" id="chat-suggestions">
+          <!-- Quick action buttons added by JS -->
+        </div>
+        <form class="chat-input-form" id="chat-form" autocomplete="off">
+          <input type="text" id="chat-input" class="chat-input" placeholder="Ask about the stadium, food, exits..." data-i18n-placeholder="chatPlaceholder" aria-label="Chat message" autocomplete="off">
+          <button type="submit" class="chat-send-btn" id="chat-send" aria-label="Send message">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </form>
+      </section>
+
+      <!-- ===== SAFETY TAB ===== -->
+      <section id="tab-safety" class="tab-content" aria-label="Safety & Emergency">
+        
+        <!-- SOS Button -->
+        <div class="sos-container">
+          <button class="sos-btn" id="btn-sos" aria-label="Emergency SOS">
+            <span class="sos-icon">🆘</span>
+            <span class="sos-text" data-i18n="emergencySOS">Emergency SOS</span>
+          </button>
+          <p class="sos-hint">Tap and hold for 2 seconds to activate</p>
+        </div>
+
+        <!-- Heat Intelligence -->
+        <h3 class="section-title">🌡️ <span data-i18n="heatIndex">Heat Intelligence</span></h3>
+        <div class="heat-card" id="heat-card">
+          <div class="heat-main">
+            <div class="heat-temp" id="heat-temp">--°C</div>
+            <div class="heat-info" id="heat-info">
+              <p class="heat-condition" id="heat-condition">--</p>
+              <p class="heat-humidity" id="heat-humidity">Humidity: --%</p>
+            </div>
+          </div>
+          <div class="heat-sections" id="heat-sections">
+            <!-- Filled by JS -->
+          </div>
+          <div class="heat-alert hidden" id="heat-alert">
+            <p data-i18n="heatWarning">⚠️ High temperature detected in your section!</p>
+          </div>
+          <div class="hydration-reminder" id="hydration-reminder">
+            <p data-i18n="hydrateReminder">💧 Stay hydrated! Drink water regularly.</p>
+          </div>
+        </div>
+
+        <!-- Crowd Density Alerts -->
+        <h3 class="section-title">⚠️ <span data-i18n="crowdAlert">Crowd Alerts</span></h3>
+        <div class="alerts-list" id="crowd-alerts">
+          <!-- Filled by JS -->
+        </div>
+
+        <!-- Nearest Help -->
+        <h3 class="section-title">🏥 <span data-i18n="nearestMedical">Nearest Help</span></h3>
+        <div class="help-list" id="help-list">
+          <!-- Filled by JS -->
+        </div>
+
+        <!-- Evacuation Route -->
+        <div class="evacuation-card hidden" id="evacuation-card">
+          <h4>🚨 <span data-i18n="evacuationRoute">Evacuation Route</span></h4>
+          <p id="evacuation-text"></p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===== BOTTOM TAB BAR ===== -->
+    <nav class="tab-bar hidden" id="tab-bar" aria-label="Main navigation">
+      <button class="tab-btn active" data-tab="home" id="tab-btn-home" aria-label="Home">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label" data-i18n="navHome">Home</span>
+      </button>
+      <button class="tab-btn" data-tab="map" id="tab-btn-map" aria-label="Map">
+        <span class="tab-icon">🗺️</span>
+        <span class="tab-label" data-i18n="navMap">Map</span>
+      </button>
+      <button class="tab-btn" data-tab="queue" id="tab-btn-queue" aria-label="Queue">
+        <span class="tab-icon">🎫</span>
+        <span class="tab-label" data-i18n="navQueue">Queue</span>
+      </button>
+      <button class="tab-btn" data-tab="chat" id="tab-btn-chat" aria-label="Chat">
+        <span class="tab-icon">🤖</span>
+        <span class="tab-label" data-i18n="navChat">Chat</span>
+      </button>
+      <button class="tab-btn" data-tab="safety" id="tab-btn-safety" aria-label="Safety">
+        <span class="tab-icon">🚨</span>
+        <span class="tab-label" data-i18n="navSafety">Safety</span>
+      </button>
+    </nav>
+
+    <!-- ===== NOTIFICATION TOAST ===== -->
+    <div class="toast hidden" id="toast" role="alert" aria-live="polite">
+      <span class="toast-icon" id="toast-icon">ℹ️</span>
+      <span class="toast-message" id="toast-message"></span>
+    </div>
+
+  </div>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
