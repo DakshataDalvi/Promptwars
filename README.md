@@ -1,5 +1,8 @@
 # MaidanMind: AI Crowd Intelligence for Indian Stadiums
 
+🚀 **Live Demo Submission:** [Click here to test MaidanMind on Google Cloud](https://maidanmind-app-215117000552.asia-south1.run.app/)
+
+
 MaidanMind is an intelligent, sport-aware crowd management platform designed to eliminate the chaos, long queues, and safety risks associated with attending massive physical events in India. 
 
 ---
@@ -45,11 +48,14 @@ To develop and demonstrate this prototype during the hackathon, the following as
 
 ## 🚀 Local Setup & Deployment
 
-**To Run Locally:**
-1. Clone this repository.
-2. Ensure you have a Gemini AI API Key populated in `js/config.js` for the smart chatbot.
-3. Serve via any local HTTP Server (e.g., `python -m http.server 3000` or VS Code Live Server).
-4. Do NOT use `file:///` protocols as they block API fetch requests due to CORS.
+**To Run Locally (Full Experience):**
+1. Clone this repository to your local machine.
+2. Navigate to `js/config.js` and input your own API keys to enable the live integrations:
+   - **Gemini API Key:** Replace `[ENCRYPTION_KEY]` with your Google AI Studio key to activate the intelligent Chatbot.
+   - **Google Maps API Key:** Replace `'YOUR_GOOGLE_MAPS_API_KEY'` to enable future maps integrations (currently the heatmap uses native SVG fallback).
+   *(Note: If you do not provide a Gemini key, the application will automatically fall back to an offline simulated data engine!)*
+3. Serve the directory via any local HTTP Server (e.g., `python -m http.server 3000` or VS Code Live Server).
+4. Do NOT use `file:///` protocols to open `index.html` as they block API fetch requests due to CORS policies.
 
 **Google Cloud Build Deployment:**
 This repository contains a `Dockerfile` utilizing Nginx and is ready to be directly deployed to Google Cloud Run. 
