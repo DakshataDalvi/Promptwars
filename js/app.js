@@ -48,6 +48,12 @@ function initApp() {
   initQueueTabs();
   initMapFilters();
   updateI18n();
+
+  // Register PWA Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .catch(err => console.error("Service Worker registration failed:", err));
+  }
 }
 
 /* ===== VENUE SELECTION ===== */
@@ -698,13 +704,62 @@ function renderChatWelcome() {
   ).join('');
 }
 
+function initVoiceAndVision() {
+  const micBtn = document.getElementById('chat-mic-btn');
+  const imgUpload = document.getElementById('chat-img-upload');
+
+  // Vision API: Store base64 of selected image
+  imgUpload.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        window.MaidanMind.attachedImageBase64 = event.target.result;
+        document.getElementById('chat-cam-btn').style.background = 'var(--accent-saffron)';
+        showToast('📷', 'Image attached! Ask Gemini to analyze it.', 3000);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // Voice AI: Speech Recognition
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    micBtn.addEventListener('click', () => {
+      recognition.lang = window.MaidanMind.currentLanguage === 'en' ? 'en-IN' : window.MaidanMind.currentLanguage + '-IN';
+      recognition.start();
+      micBtn.classList.add('listening');
+    });
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      document.getElementById('chat-input').value = transcript;
+      micBtn.classList.remove('listening');
+    };
+
+    recognition.onerror = () => {
+      micBtn.classList.remove('listening');
+      showToast('⚠️', 'Could not hear you. Please try again.');
+    };
+    recognition.onend = () => micBtn.classList.remove('listening');
+  } else {
+    micBtn.style.display = 'none'; // Hide if browser doesn't support
+  }
+}
+
 function initChatForm() {
+  initVoiceAndVision();
+
   document.getElementById('chat-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const input = document.getElementById('chat-input');
     const msg = input.value.trim();
-    if (!msg) return;
-    sendChatMessage(msg);
+    if (!msg && !window.MaidanMind.attachedImageBase64) return;
+    sendChatMessage(msg || "What do you see in this image?");
     input.value = '';
   });
 }
@@ -765,9 +820,24 @@ SPECIAL CAPABILITIES:
 3. HEAT INTELLIGENCE: You monitor section temperatures and advise on heat safety
 4. EXIT PLANNING: You can plan the optimal departure based on match state and crowd density
 
-IMPORTANT: Always use the real-time data provided above. Never make up numbers. If data shows dangerous conditions (temp > 40°C, density > 90%), ALWAYS warn the user.`;
+IMPORTANT: Always use the real-time data provided above. Never make up numbers. If data shows dangerous conditions (temp > 40°C, density > 90%), ALWAYS warn the user. If the user attaches an image, analyze it visually based on their question!`;
 
   try {
+    const userParts = [{ text: userMessage }];
+    
+    // Check for Multimodal Request (Attached Image)
+    if (state.attachedImageBase64) {
+      const match = state.attachedImageBase64.match(/^data:(image\/[a-zA-Z+]+);base64,(.+)$/);
+      if (match) {
+        userParts.push({
+          inlineData: { mimeType: match[1], data: match[2] }
+        });
+      }
+      // Clear image attachment after reading
+      state.attachedImageBase64 = null;
+      document.getElementById('chat-cam-btn').style.background = '';
+    }
+
     const response = await fetch(`${CONFIG.GEMINI_API_URL}?key=${CONFIG.GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -776,7 +846,7 @@ IMPORTANT: Always use the real-time data provided above. Never make up numbers. 
           { role: 'user', parts: [{ text: systemPrompt }] },
           { role: 'model', parts: [{ text: 'Understood! I am MaidanMind AI, ready to help fans with real-time data.' }] },
           ...state.chatHistory.slice(-6),
-          { role: 'user', parts: [{ text: userMessage }] }
+          { role: 'user', parts: userParts }
         ],
         generationConfig: {
           temperature: 0.7,
@@ -871,6 +941,15 @@ function displayAIResponse(text) {
   `;
 
   scrollChatToBottom();
+
+  // Voice AI: Text-to-Speech
+  if ('speechSynthesis' in window) {
+    // Strip bolding asterisks and emojis which sound weird when spoken
+    const cleanText = text.replace(/\*\*(.*?)\*\*/g, '$1').replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '');
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = window.MaidanMind.currentLanguage === 'en' ? 'en-IN' : window.MaidanMind.currentLanguage + '-IN';
+    window.speechSynthesis.speak(utterance);
+  }
 }
 
 function scrollChatToBottom() {

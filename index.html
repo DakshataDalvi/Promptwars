@@ -15,6 +15,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
   
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -225,7 +228,14 @@
           <!-- Quick action buttons added by JS -->
         </div>
         <form class="chat-input-form" id="chat-form" autocomplete="off">
-          <input type="text" id="chat-input" class="chat-input" placeholder="Ask about the stadium, food, exits..." data-i18n-placeholder="chatPlaceholder" aria-label="Chat message" autocomplete="off">
+          <button type="button" class="chat-action-btn" id="chat-mic-btn" aria-label="Speech to Text" title="Speak">
+            <span>🎤</span>
+          </button>
+          <label class="chat-action-btn" id="chat-cam-btn" aria-label="Upload Image" title="Upload Image">
+            <span>📷</span>
+            <input type="file" id="chat-img-upload" accept="image/*" style="display:none;">
+          </label>
+          <input type="text" id="chat-input" class="chat-input" placeholder="Ask about the stadium..." data-i18n-placeholder="chatPlaceholder" aria-label="Chat message" autocomplete="off">
           <button type="submit" class="chat-send-btn" id="chat-send" aria-label="Send message">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
           </button>
