@@ -1,6 +1,10 @@
 # MaidanMind: AI Crowd Intelligence for Indian Stadiums
 
-> 🚀 **Live Demo Submission:** [Click here to test MaidanMind on Google Cloud]({YOUR_CLOUD_URL_HERE})
+
+
+🚀 **Live Demo Submission:** [Click here to test MaidanMind on Google Cloud](https://maidanmind-app-215117000552.asia-south1.run.app/)
+
+
 
 MaidanMind is an intelligent, sport-aware crowd management platform designed to eliminate the chaos, long queues, and safety risks associated with attending massive physical events in India. 
 
